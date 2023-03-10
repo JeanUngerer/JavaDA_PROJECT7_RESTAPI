@@ -1,20 +1,33 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.BidList;
+import com.nnk.springboot.mappers.BidListMapper;
+import com.nnk.springboot.mappers.UserMapper;
+import com.nnk.springboot.service.BidListService;
+import com.nnk.springboot.service.UserService;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 
-@Controller
+@RestController
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
+@RequestMapping("bidList")
 public class BidListController {
     // TODO: Inject Bid service
+
+    BidListService bidListService;
+
+    BidListMapper bidListMapper;
 
     @RequestMapping("/bidList/list")
     public String home(Model model)
