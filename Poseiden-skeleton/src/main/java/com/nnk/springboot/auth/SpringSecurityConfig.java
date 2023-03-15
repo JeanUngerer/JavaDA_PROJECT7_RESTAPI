@@ -26,15 +26,13 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @Setter
 public class SpringSecurityConfig {
 
-    private static List<String> clients = Arrays.asList("github");
-
     private final PasswordEncoder encoder;
 
 
 
     private final UserService myUserDetailsService;
 
-    public SpringSecurityConfig(PasswordEncoder encoder, RsaKeyProperties rsaKeys, UserService myUserDetailsService) {
+    public SpringSecurityConfig(PasswordEncoder encoder, UserService myUserDetailsService) {
         this.encoder = encoder;
         this.myUserDetailsService = myUserDetailsService;
     }
@@ -43,15 +41,13 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/login**", "/home").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                         )
                 .userDetailsService(myUserDetailsService)
                 .formLogin(withDefaults())
-                //.httpBasic(withDefaults())
                 .build();
     }
 

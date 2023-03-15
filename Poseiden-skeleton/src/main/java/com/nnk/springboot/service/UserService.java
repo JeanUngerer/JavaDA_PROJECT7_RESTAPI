@@ -103,7 +103,6 @@ public class UserService implements UserDetailsService {
         try {
             log.info("loadUserByUsername");
             User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("No user with that username"));
-            UserModel userModel = userMapper.entityToModel(user);
             List<SimpleGrantedAuthority> authi = new ArrayList<>();
             authi.add(new SimpleGrantedAuthority(user.getRole()));
             return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authi);
