@@ -1,5 +1,6 @@
 package com.nnk.springboot.service;
 
+import com.nnk.springboot.domain.RuleName;
 import com.nnk.springboot.dtos.RuleNameDTO;
 import com.nnk.springboot.exception.ExceptionHandler;
 import com.nnk.springboot.helpers.CycleAvoidingMappingContext;
@@ -27,6 +28,11 @@ public class RuleNameService {
 
     RuleNameRepository ruleNameRepository;
 
+    /**
+     * Get all RuleName objects from database
+     * @return List<RuleNameModel> list of all entities found in database
+     * @throws Exception Bad Request on error
+     */
     public List<RuleNameModel> findAllRuleName() {
         try {
             log.info("findAllRuleName");
@@ -39,6 +45,12 @@ public class RuleNameService {
         }
     }
 
+    /**
+     * Get a RuleName object from database by ID
+     * @param id the Id of the object to find
+     * @return RuleNameModel the ruleName with correct Id, if any.
+     * @throws  Exception Bad Request on error
+     */
     public RuleNameModel findRuleNameById(Integer id) {
         try {
             log.info("findRuleNameById - id: " + id.toString());
@@ -51,31 +63,50 @@ public class RuleNameService {
         }
     }
 
+    /**
+     * Save a RuleName object into database.
+     * @param dto the RuleName to save or update into database
+     * @return RuleNameModel the saved RuleName
+     * @throws  Exception Bad Request on error
+     */
     public RuleNameModel createRuleName(RuleNameDTO dto) {
         try {
             log.info("createRuleName");
             RuleNameModel ruleName = ruleNameMapper.dtoToModel(dto);
-            ruleNameRepository.save(ruleNameMapper.modelToEntity(ruleName));
-            return ruleName;
+            RuleName entity = ruleNameRepository.save(ruleNameMapper.modelToEntity(ruleName));
+            return ruleNameMapper.entityToModel(entity);
         } catch (Exception e) {
             log.error("Couldn't ruleName user: " + e.getMessage());
             throw new ExceptionHandler("We could not create your ruleName");
         }
     }
+
+    /**
+     * Update a RuleName object into database.
+     * @param dto the RuleName to save or update into database
+     * @return RuleNameModel the saved RuleName
+     * @throws  Exception Bad Request on error
+     */
     public RuleNameModel updateRuleName(RuleNameDTO dto) {
         try {
             log.info("updateRuleNameModel - id: " + dto.getId().toString());
             RuleNameModel ruleName = ruleNameMapper.entityToModel(ruleNameRepository.findById(dto.getId()).orElseThrow(()
                     -> new ExceptionHandler("We could not find your ruleName")));
             ruleNameMapper.updateRuleNameModelFromDto(dto, ruleName, new CycleAvoidingMappingContext());
-            ruleNameRepository.save(ruleNameMapper.modelToEntity(ruleName));
-            return ruleName;
+            RuleName entity = ruleNameRepository.save(ruleNameMapper.modelToEntity(ruleName));
+            return ruleNameMapper.entityToModel(entity);
         } catch (Exception e) {
             log.error("Couldn't update user: " + e.getMessage());
             throw new ExceptionHandler("We could not update your ruleName");
         }
     }
 
+    /**
+     * Delete a RuleName object from database by ID
+     * @param id the Id of the object to delete
+     * @return String deleted messsage.
+     * @throws Exception Bad Request on error
+     */
     public String deleteRuleName(Integer id) {
         try {
             log.info("deleteRuleNameModel - id: " + id.toString());

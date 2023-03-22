@@ -16,13 +16,12 @@ import org.springframework.web.servlet.ModelAndView;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-@RequestMapping("app")
 public class LoginController {
 
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("login")
+    //@GetMapping("login")
     public ModelAndView login() {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("login");

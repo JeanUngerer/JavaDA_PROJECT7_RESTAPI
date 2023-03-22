@@ -35,6 +35,11 @@ public class UserService implements UserDetailsService {
 
     PasswordEncoder passwordEncoder;
 
+    /**
+     * Get all User objects from database
+     * @return List<UserModel> list of all entities found in database
+     * @throws Exception Bad Request on error
+     */
     public List<UserModel> findAllUser() {
         try {
             log.info("findAllUser");
@@ -47,6 +52,12 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * Get a User object from database by ID
+     * @param id the Id of the object to find
+     * @return UserModel the user with correct Id, if any.
+     * @throws  Exception Bad Request on error
+     */
     public UserModel findUserById(Integer id) {
         try {
             log.info("findUserById - id: " + id.toString());
@@ -59,32 +70,51 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * Save a User object into database.
+     * @param dto the User to save or update into database
+     * @return UserModel the saved User
+     * @throws  Exception Bad Request on error
+     */
     public UserModel createUser(UserDTO dto) {
         try {
             log.info("createUser");
             UserModel user = userMapper.dtoToModel(dto);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userRepository.save(userMapper.modelToEntity(user));
-            return user;
+            User entity = userRepository.save(userMapper.modelToEntity(user));
+            return userMapper.entityToModel(entity);
         } catch (Exception e) {
             log.error("Couldn't user user: " + e.getMessage());
             throw new ExceptionHandler("We could not create your user");
         }
     }
+
+    /**
+     * Update a User object into database.
+     * @param dto the User to save or update into database
+     * @return UserModel the saved User
+     * @throws  Exception Bad Request on error
+     */
     public UserModel updateUser(UserDTO dto) {
         try {
             log.info("updateUserModel - id: " + dto.getId().toString());
             UserModel user = userMapper.entityToModel(userRepository.findById(dto.getId()).orElseThrow(()
                     -> new ExceptionHandler("We could not find your user")));
             userMapper.updateUserModelFromDto(dto, user, new CycleAvoidingMappingContext());
-            userRepository.save(userMapper.modelToEntity(user));
-            return user;
+            User entity = userRepository.save(userMapper.modelToEntity(user));
+            return userMapper.entityToModel(entity);
         } catch (Exception e) {
             log.error("Couldn't update user: " + e.getMessage());
             throw new ExceptionHandler("We could not update your user");
         }
     }
 
+    /**
+     * Delete a User object from database by ID
+     * @param id the Id of the object to delete
+     * @return String deleted messsage.
+     * @throws Exception Bad Request on error
+     */
     public String deleteUser(Integer id) {
         try {
             log.info("deleteUserModel - id: " + id.toString());
@@ -98,6 +128,12 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    /**
+     * Loads a User object from database by username
+     * @param username the username of the User to load
+     * @return UserDetails loaded user.
+     * @throws Exception Bad Request on error
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {

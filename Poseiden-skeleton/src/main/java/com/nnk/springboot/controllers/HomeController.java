@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
+
 @Controller
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -17,8 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController
 {
 	@RequestMapping("/")
-	public String home(Model model)
+	public String home(Model model, Principal user)
 	{
+		if (user != null){
+			addUsernameToModel(model, user.getName());
+		} else {
+			addUsernameToModel(model, "No User Authenticated");
+		}
 		return "home";
 	}
 
@@ -29,5 +36,7 @@ public class HomeController
 		return "redirect:/bidList/list";
 	}
 
-
+	private Model addUsernameToModel(Model model, String username) {
+		return model.addAttribute("remoteUser", username);
+	}
 }

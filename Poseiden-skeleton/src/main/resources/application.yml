@@ -2,6 +2,10 @@ logging:
   level:
     org:
       springframework: INFO
+  file:
+    name: logs/logfile.log
+  pattern:
+    file: "%d %p %c{1.} [%t] %m%n"
 
 
 ################### DataSource Configuration ##########################
@@ -18,7 +22,3 @@ spring:
     hibernate:
       ddl-auto: create-drop
     show-sql: true
-
-rsa:
-  private-key: classpath:certs/private.pem
-  public-key: classpath:certs/public.pem

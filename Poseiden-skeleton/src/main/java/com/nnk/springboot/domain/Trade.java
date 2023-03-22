@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 import java.sql.Timestamp;
 
 
@@ -29,21 +31,27 @@ public class Trade {
     @Column(name = "tradeId", unique = true, nullable = false)
     Integer tradeId;
 
+    @NotBlank(message = "Account is mandatory")
     @Column(name = "account")
     String account;
 
+    @NotBlank(message = "Type is mandatory")
     @Column(name = "type")
     String type;
 
+    @PositiveOrZero
     @Column(name = "buyQuantity")
     Double buyQuantity;
 
+    @PositiveOrZero
     @Column(name = "sellQuantity")
     Double sellQuantity;
 
+    @PositiveOrZero
     @Column(name = "buyPrice")
     Double buyPrice;
 
+    @PositiveOrZero
     @Column(name = "sellPrice")
     Double sellPrice;
 

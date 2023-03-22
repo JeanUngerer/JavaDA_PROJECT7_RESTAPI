@@ -5,8 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 
 @Entity
@@ -27,6 +30,8 @@ public class User {
     private String username;
 
     @NotBlank(message = "Password is mandatory")
+    @Size(min = 8, message = "Password is too short min 8 characters")
+    @Size(max = 16, message = "Password is too long max 16 characters")
     @Column(name = "password", nullable = false)
     private String password;
 

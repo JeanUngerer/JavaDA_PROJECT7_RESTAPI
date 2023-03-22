@@ -20,6 +20,10 @@ import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+
+/**
+ * SecurityConfig of application
+ */
 @Configuration
 @EnableWebSecurity
 @Getter
@@ -37,17 +41,25 @@ public class SpringSecurityConfig {
         this.myUserDetailsService = myUserDetailsService;
     }
 
-
+    /**
+     * Bean loaded in spring context
+     * SecurityFilterChain, defines the authorizations for API points
+     * Adds a login and logout Url
+     * @param http HttpSecurity filter chain
+     * @return http.build()
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                                .requestMatchers("/").permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .anyRequest().authenticated()
                         )
                 .userDetailsService(myUserDetailsService)
                 .formLogin(withDefaults())
+                .logout(withDefaults())
                 .build();
     }
 

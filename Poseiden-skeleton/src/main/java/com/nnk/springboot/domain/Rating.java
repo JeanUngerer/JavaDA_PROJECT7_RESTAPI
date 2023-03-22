@@ -18,9 +18,9 @@ public class Rating {
     // TODO: Map columns in data table RATING with corresponding java fields
 
 
-    public Rating(String moodysRating, String sandPRating, String fitchRating, Integer orderNumber) {
+    public Rating(String moodysRating, String sandRating, String fitchRating, Integer orderNumber) {
         this.moodysRating = moodysRating;
-        this.sandPRating = sandPRating;
+        this.sandRating = sandRating;
         this.fitchRating = fitchRating;
         this.orderNumber = orderNumber;
     }
@@ -33,8 +33,8 @@ public class Rating {
     @Column(name = "moodysRating")
     String moodysRating;
 
-    @Column(name = "sandPRating")
-    String sandPRating;
+    @Column(name = "sandRating")
+    String sandRating;
 
     @Column(name = "fitchRating")
     String fitchRating;

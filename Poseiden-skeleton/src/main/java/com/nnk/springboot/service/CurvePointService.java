@@ -1,5 +1,6 @@
 package com.nnk.springboot.service;
 
+import com.nnk.springboot.domain.CurvePoint;
 import com.nnk.springboot.dtos.CurvePointDTO;
 import com.nnk.springboot.exception.ExceptionHandler;
 import com.nnk.springboot.helpers.CycleAvoidingMappingContext;
@@ -27,6 +28,11 @@ public class CurvePointService {
 
     CurvePointRepository curvePointRepository;
 
+    /**
+     * Get all CurvePoint objects from database
+     * @return List<CurvePointModel> list of all entities found in database
+     * @throws Exception Bad Request on error
+     */
     public List<CurvePointModel> findAllCurvePoint() {
         try {
             log.info("findAllCurvePoint");
@@ -39,6 +45,12 @@ public class CurvePointService {
         }
     }
 
+    /**
+     * Get a CurvePoint object from database by ID
+     * @param id the Id of the object to find
+     * @return CurvePointModel the curvePoint with correct Id, if any.
+     * @throws  Exception Bad Request on error
+     */
     public CurvePointModel findCurvePointById(Integer id) {
         try {
             log.info("findCurvePointById - id: " + id.toString());
@@ -51,31 +63,50 @@ public class CurvePointService {
         }
     }
 
+    /**
+     * Save a CurvePoint object into database.
+     * @param dto the CurvePoint to save or update into database
+     * @return CurvePointModel the saved CurvePoint
+     * @throws  Exception Bad Request on error
+     */
     public CurvePointModel createCurvePoint(CurvePointDTO dto) {
         try {
             log.info("createCurvePoint");
             CurvePointModel curvePoint = curvePointMapper.dtoToModel(dto);
-            curvePointRepository.save(curvePointMapper.modelToEntity(curvePoint));
-            return curvePoint;
+            CurvePoint entity = curvePointRepository.save(curvePointMapper.modelToEntity(curvePoint));
+            return curvePointMapper.entityToModel(entity);
         } catch (Exception e) {
             log.error("Couldn't curvePoint user: " + e.getMessage());
             throw new ExceptionHandler("We could not create your curvePoint");
         }
     }
+
+    /**
+     * Update a CurvePoint object into database.
+     * @param dto the CurvePoint to save or update into database
+     * @return CurvePointModel the saved CurvePoint
+     * @throws  Exception Bad Request on error
+     */
     public CurvePointModel updateCurvePoint(CurvePointDTO dto) {
         try {
             log.info("updateCurvePointModel - id: " + dto.getId().toString());
             CurvePointModel curvePoint = curvePointMapper.entityToModel(curvePointRepository.findById(dto.getId()).orElseThrow(()
                     -> new ExceptionHandler("We could not find your curvePoint")));
             curvePointMapper.updateCurvePointModelFromDto(dto, curvePoint, new CycleAvoidingMappingContext());
-            curvePointRepository.save(curvePointMapper.modelToEntity(curvePoint));
-            return curvePoint;
+            CurvePoint entity = curvePointRepository.save(curvePointMapper.modelToEntity(curvePoint));
+            return curvePointMapper.entityToModel(entity);
         } catch (Exception e) {
             log.error("Couldn't update user: " + e.getMessage());
             throw new ExceptionHandler("We could not update your curvePoint");
         }
     }
 
+    /**
+     * Delete a CurvePoint object from database by ID
+     * @param id the Id of the object to delete
+     * @return String deleted messsage.
+     * @throws Exception Bad Request on error
+     */
     public String deleteCurvePoint(Integer id) {
         try {
             log.info("deleteCurvePointModel - id: " + id.toString());

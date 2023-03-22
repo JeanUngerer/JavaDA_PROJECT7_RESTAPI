@@ -19,11 +19,15 @@ import javax.validation.Valid;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-@RequestMapping("user")
 public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * get method to get all Bids
+     * @param model Model
+     * @return template
+     */
     @RequestMapping("/user/list")
     public String home(Model model)
     {
@@ -31,11 +35,23 @@ public class UserController {
         return "user/list";
     }
 
+    /**
+     * get method to show user form
+     * @param user UserDTO
+     * @return template
+     */
     @GetMapping("/user/add")
-    public String addUser(User bid) {
+    public String addUser(User user) {
         return "user/add";
     }
 
+    /**
+     * post method to add new user
+     * @param user UserDTO
+     * @param result BindingResult
+     * @param model Model
+     * @return add user list in database
+     */
     @PostMapping("/user/validate")
     public String validate(@Valid User user, BindingResult result, Model model) {
         if (!result.hasErrors()) {
@@ -48,6 +64,12 @@ public class UserController {
         return "user/add";
     }
 
+    /**
+     * get method to show user update form
+     * @param id
+     * @param model
+     * @return user update form
+     */
     @GetMapping("/user/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
@@ -56,6 +78,14 @@ public class UserController {
         return "user/update";
     }
 
+    /**
+     * post method to update user by id
+     * @param id Integer
+     * @param user UserDTO
+     * @param result BindingResult
+     * @param model Model
+     * @return template
+     */
     @PostMapping("/user/update/{id}")
     public String updateUser(@PathVariable("id") Integer id, @Valid User user,
                              BindingResult result, Model model) {
@@ -71,6 +101,12 @@ public class UserController {
         return "redirect:/user/list";
     }
 
+    /**
+     * delete method to delete user by id
+     * @param id Integer
+     * @param model Model
+     * @return template
+     */
     @GetMapping("/user/delete/{id}")
     public String deleteUser(@PathVariable("id") Integer id, Model model) {
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));

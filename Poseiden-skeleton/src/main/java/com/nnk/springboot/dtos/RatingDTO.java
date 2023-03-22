@@ -11,7 +11,7 @@ public class RatingDTO {
 
     Integer id;
     String moodysRating;
-    String sandPRating;
+    String sandRating;
     String fitchRating;
     Integer orderNumber;
 }

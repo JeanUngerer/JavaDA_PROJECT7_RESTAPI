@@ -1,6 +1,7 @@
 package com.nnk.springboot.service;
 
 
+import com.nnk.springboot.domain.BidList;
 import com.nnk.springboot.dtos.BidListDTO;
 import com.nnk.springboot.exception.ExceptionHandler;
 import com.nnk.springboot.helpers.CycleAvoidingMappingContext;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,11 @@ public class BidListService {
 
     BidListRepository bidListRepository;
 
+    /**
+     * Get all BidList objects from database
+     * @return List<BidListModel> list of all entities found in database
+     * @throws Exception Bad Request on error
+     */
     public List<BidListModel> findAllBidList() {
         try {
             log.info("findAllBidList");
@@ -40,6 +47,12 @@ public class BidListService {
         }
     }
 
+    /**
+     * Get a BidList object from database by ID
+     * @param id the Id of the object to find
+     * @return BidListModel the bidList with correct Id, if any.
+     * @throws  Exception Bad Request on error
+     */
     public BidListModel findBidListById(Integer id) {
         try {
             log.info("findBidListById - id: " + id.toString());
@@ -52,31 +65,50 @@ public class BidListService {
         }
     }
 
+    /**
+     * Save a BidList object into database.
+     * @param dto the BidList to save or update into database
+     * @return BidListModel the saved BidList
+     * @throws  Exception Bad Request on error
+     */
     public BidListModel createBidList(BidListDTO dto) {
         try {
             log.info("createBidList");
             BidListModel bidList = bidListMapper.dtoToModel(dto);
-            bidListRepository.save(bidListMapper.modelToEntity(bidList));
-            return bidList;
+            BidList entity = bidListRepository.save(bidListMapper.modelToEntity(bidList));
+            return bidListMapper.entityToModel(entity);
         } catch (Exception e) {
             log.error("Couldn't bidList user: " + e.getMessage());
             throw new ExceptionHandler("We could not create your bidList");
         }
     }
+
+    /**
+     * Update a BidList object into database.
+     * @param dto the BidList to save or update into database
+     * @return BidListModel the saved BidList
+     * @throws  Exception Bad Request on error
+     */
     public BidListModel updateBidList(BidListDTO dto) {
         try {
             log.info("updateBidListModel - id: " + dto.getBidListId().toString());
             BidListModel bidList = bidListMapper.entityToModel(bidListRepository.findById(dto.getBidListId()).orElseThrow(()
                     -> new ExceptionHandler("We could not find your bidList")));
             bidListMapper.updateBidListModelFromDto(dto, bidList, new CycleAvoidingMappingContext());
-            bidListRepository.save(bidListMapper.modelToEntity(bidList));
-            return bidList;
+            BidList entity = bidListRepository.save(bidListMapper.modelToEntity(bidList));
+            return bidListMapper.entityToModel(entity);
         } catch (Exception e) {
             log.error("Couldn't update user: " + e.getMessage());
             throw new ExceptionHandler("We could not update your bidList");
         }
     }
 
+    /**
+     * Delete a BidList object from database by ID
+     * @param id the Id of the object to delete
+     * @return String deleted messsage.
+     * @throws Exception Bad Request on error
+     */
     public String deleteBidList(Integer id) {
         try {
             log.info("deleteBidListModel - id: " + id.toString());

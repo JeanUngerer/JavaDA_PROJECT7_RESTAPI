@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -30,21 +32,27 @@ public class BidList {
     @Column(name = "bidListId", unique = true, nullable = false)
     Integer bidListId;
 
+    @NotBlank(message = "Account is mandatory")
     @Column(name = "account")
     String account;
 
+    @NotBlank(message = "Type is mandatory")
     @Column(name = "type")
     String type;
 
+    @PositiveOrZero
     @Column(name = "bidQuantity")
     Double bidQuantity;
 
+    @PositiveOrZero
     @Column(name = "askQuantity")
     Double askQuantity;
 
+    @PositiveOrZero
     @Column(name = "bid")
     Double bid;
 
+    @PositiveOrZero
     @Column(name = "ask")
     Double ask;
 

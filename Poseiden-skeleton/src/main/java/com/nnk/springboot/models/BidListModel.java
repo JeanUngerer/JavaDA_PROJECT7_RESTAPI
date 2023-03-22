@@ -2,6 +2,8 @@ package com.nnk.springboot.models;
 
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 import java.sql.Timestamp;
 
 @Setter
@@ -12,11 +14,17 @@ import java.sql.Timestamp;
 public class BidListModel {
 
     Integer bidListId;
+    @NotBlank(message = "Account is mandatory")
     String account;
+    @NotBlank(message = "Type is mandatory")
     String type;
+    @PositiveOrZero
     Double bidQuantity;
+    @PositiveOrZero
     Double askQuantity;
+    @PositiveOrZero
     Double bid;
+    @PositiveOrZero
     Double ask;
     String benchmark;
     Timestamp bidListDate;

@@ -2,6 +2,7 @@ package com.nnk.springboot.dtos;
 
 import lombok.*;
 
+import javax.validation.constraints.PositiveOrZero;
 import java.sql.Timestamp;
 
 @Setter
@@ -15,6 +16,7 @@ public class CurvePointDTO {
     Integer curveId;
     Timestamp asOfDate;
     Double term;
+    @PositiveOrZero
     Double value;
     Timestamp creationDate;
 }

@@ -7,7 +7,7 @@ logging:
 ################### DataSource Configuration ##########################
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    #driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/testp7?createDatabaseIfNotExist=true
     username: root
     password: admin1
@@ -20,7 +20,3 @@ spring:
     hibernate:
       ddl-auto: create-drop
     show-sql: true
-
-rsa:
-  private-key: classpath:certs/private.pem
-  public-key: classpath:certs/public.pem

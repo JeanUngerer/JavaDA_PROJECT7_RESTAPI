@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 
-@RestController
+@Controller
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
@@ -28,6 +28,12 @@ public class RatingController {
 
     RatingService ratingService;
 
+    /**
+     * get method to get all Bids
+     * @param model Model
+     * @param user Principal
+     * @return template
+     */
     @RequestMapping("/rating/list")
     public String home(Model model, Principal user) {
         addRatingToModel(model);
@@ -35,11 +41,23 @@ public class RatingController {
         return "rating/list";
     }
 
+    /**
+     * get method to show rating form
+     * @param rating RatingDTO
+     * @return template
+     */
     @GetMapping("/rating/add")
-    public String addRatingForm(Rating rating) {
+    public String addRatingForm(RatingDTO rating) {
         return "rating/add";
     }
 
+    /**
+     * post method to add new rating
+     * @param rating RatingDTO
+     * @param result BindingResult
+     * @param model Model
+     * @return add rating list in database
+     */
     @PostMapping("/rating/validate")
     public String validate(@Valid RatingDTO rating, BindingResult result, Model model) {
         if (!result.hasErrors()) {
@@ -52,6 +70,12 @@ public class RatingController {
         return "rating/add";
     }
 
+    /**
+     * get method to show rating update form
+     * @param id
+     * @param model
+     * @return rating update form
+     */
     @GetMapping("/rating/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         RatingDTO rating = ratingMapper.modelToDto(ratingService.findRatingById(id));
@@ -60,6 +84,14 @@ public class RatingController {
         return "rating/update";
     }
 
+    /**
+     * post method to update rating by id
+     * @param id Integer
+     * @param rating RatingDTO
+     * @param result BindingResult
+     * @param model Model
+     * @return template
+     */
     @PostMapping("/rating/update/{id}")
     public String updateRating(@PathVariable("id") Integer id, @Valid RatingDTO rating, BindingResult result,
                                    Model model) {
@@ -74,6 +106,12 @@ public class RatingController {
         return "redirect:/rating/list";
     }
 
+    /**
+     * delete method to delete rating by id
+     * @param id Integer
+     * @param model Model
+     * @return template
+     */
     @GetMapping("/rating/delete/{id}")
     public String deleteRating(@PathVariable("id") Integer id, Model model) {
         ratingService.deleteRating(id);
@@ -81,10 +119,20 @@ public class RatingController {
         return "redirect:/rating/list";
     }
 
+    /**
+     * delete method to delete rating by id
+     * @param model Model
+     * @return add attribute listRating to model
+     */
     private Model addRatingToModel(Model model) {
         return model.addAttribute("listRating", ratingMapper.modelsToDtos(ratingService.findAllRating()));
     }
 
+    /**
+     * delete method to delete rating by id
+     * @param model Model
+     * @return adds attribute remoteUser to model
+     */
     private Model addUsernameToModel(Model model, String username) {
         return model.addAttribute("remoteUser", username);
     }

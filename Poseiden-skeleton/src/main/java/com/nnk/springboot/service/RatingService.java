@@ -1,5 +1,6 @@
 package com.nnk.springboot.service;
 
+import com.nnk.springboot.domain.Rating;
 import com.nnk.springboot.dtos.RatingDTO;
 import com.nnk.springboot.exception.ExceptionHandler;
 import com.nnk.springboot.helpers.CycleAvoidingMappingContext;
@@ -27,6 +28,11 @@ public class RatingService {
 
     RatingRepository ratingRepository;
 
+    /**
+     * Get all Rating objects from database
+     * @return List<RatingModel> list of all entities found in database
+     * @throws Exception Bad Request on error
+     */
     public List<RatingModel> findAllRating() {
         try {
             log.info("findAllRating");
@@ -39,6 +45,12 @@ public class RatingService {
         }
     }
 
+    /**
+     * Get a Rating object from database by ID
+     * @param id the Id of the object to find
+     * @return RatingModel the rating with correct Id, if any.
+     * @throws  Exception Bad Request on error
+     */
     public RatingModel findRatingById(Integer id) {
         try {
             log.info("findRatingById - id: " + id.toString());
@@ -51,31 +63,50 @@ public class RatingService {
         }
     }
 
+    /**
+     * Save a Rating object into database.
+     * @param dto the Rating to save or update into database
+     * @return RatingModel the saved Rating
+     * @throws  Exception Bad Request on error
+     */
     public RatingModel createRating(RatingDTO dto) {
         try {
             log.info("createRating");
             RatingModel rating = ratingMapper.dtoToModel(dto);
-            ratingRepository.save(ratingMapper.modelToEntity(rating));
-            return rating;
+            Rating entity = ratingRepository.save(ratingMapper.modelToEntity(rating));
+            return ratingMapper.entityToModel(entity);
         } catch (Exception e) {
             log.error("Couldn't rating user: " + e.getMessage());
             throw new ExceptionHandler("We could not create your rating");
         }
     }
+
+    /**
+     * Update a Rating object into database.
+     * @param dto the Rating to save or update into database
+     * @return RatingModel the saved Rating
+     * @throws  Exception Bad Request on error
+     */
     public RatingModel updateRating(RatingDTO dto) {
         try {
             log.info("updateRatingModel - id: " + dto.getId().toString());
             RatingModel rating = ratingMapper.entityToModel(ratingRepository.findById(dto.getId()).orElseThrow(()
                     -> new ExceptionHandler("We could not find your rating")));
             ratingMapper.updateRatingModelFromDto(dto, rating, new CycleAvoidingMappingContext());
-            ratingRepository.save(ratingMapper.modelToEntity(rating));
-            return rating;
+            Rating entity = ratingRepository.save(ratingMapper.modelToEntity(rating));
+            return ratingMapper.entityToModel(entity);
         } catch (Exception e) {
             log.error("Couldn't update user: " + e.getMessage());
             throw new ExceptionHandler("We could not update your rating");
         }
     }
 
+    /**
+     * Delete a Rating object from database by ID
+     * @param id the Id of the object to delete
+     * @return String deleted messsage.
+     * @throws Exception Bad Request on error
+     */
     public String deleteRating(Integer id) {
         try {
             log.info("deleteRatingModel - id: " + id.toString());

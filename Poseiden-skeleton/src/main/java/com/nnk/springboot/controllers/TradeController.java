@@ -28,6 +28,12 @@ public class TradeController {
 
     TradeService tradeService;
 
+    /**
+     * get method to get all Bids
+     * @param model Model
+     * @param user Principal
+     * @return template
+     */
     @RequestMapping("/trade/list")
     public String home(Model model, Principal user) {
         addTradeToModel(model);
@@ -35,11 +41,23 @@ public class TradeController {
         return "trade/list";
     }
 
+    /**
+     * get method to show trade form
+     * @param trade TradeDTO
+     * @return template
+     */
     @GetMapping("/trade/add")
-    public String addTradeForm(Trade trade) {
+    public String addTradeForm(TradeDTO trade) {
         return "trade/add";
     }
 
+    /**
+     * post method to add new trade
+     * @param trade TradeDTO
+     * @param result BindingResult
+     * @param model Model
+     * @return add trade list in database
+     */
     @PostMapping("/trade/validate")
     public String validate(@Valid TradeDTO trade, BindingResult result, Model model) {
         if (!result.hasErrors()) {
@@ -52,6 +70,12 @@ public class TradeController {
         return "trade/add";
     }
 
+    /**
+     * get method to show trade update form
+     * @param id
+     * @param model
+     * @return trade update form
+     */
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         TradeDTO trade = tradeMapper.modelToDto(tradeService.findTradeById(id));
@@ -60,6 +84,14 @@ public class TradeController {
         return "trade/update";
     }
 
+    /**
+     * post method to update trade by id
+     * @param id Integer
+     * @param trade TradeDTO
+     * @param result BindingResult
+     * @param model Model
+     * @return template
+     */
     @PostMapping("/trade/update/{id}")
     public String updateTrade(@PathVariable("id") Integer id, @Valid TradeDTO trade, BindingResult result,
                                    Model model) {
@@ -74,6 +106,12 @@ public class TradeController {
         return "redirect:/trade/list";
     }
 
+    /**
+     * delete method to delete trade by id
+     * @param id Integer
+     * @param model Model
+     * @return template
+     */
     @GetMapping("/trade/delete/{id}")
     public String deleteTrade(@PathVariable("id") Integer id, Model model) {
         tradeService.deleteTrade(id);
@@ -81,10 +119,20 @@ public class TradeController {
         return "redirect:/trade/list";
     }
 
+    /**
+     * delete method to delete trade by id
+     * @param model Model
+     * @return add attribute listTrade to model
+     */
     private Model addTradeToModel(Model model) {
         return model.addAttribute("listTrade", tradeMapper.modelsToDtos(tradeService.findAllTrade()));
     }
 
+    /**
+     * delete method to delete trade by id
+     * @param model Model
+     * @return adds attribute remoteUser to model
+     */
     private Model addUsernameToModel(Model model, String username) {
         return model.addAttribute("remoteUser", username);
     }

@@ -2,6 +2,7 @@ package com.nnk.springboot.models;
 
 import lombok.*;
 
+import javax.validation.constraints.PositiveOrZero;
 import java.sql.Timestamp;
 
 @Setter
@@ -15,6 +16,7 @@ public class CurvePointModel {
     Integer curveId;
     Timestamp asOfDate;
     Double term;
+    @PositiveOrZero
     Double value;
     Timestamp creationDate;
 }

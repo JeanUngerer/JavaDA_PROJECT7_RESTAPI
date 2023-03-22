@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.PositiveOrZero;
 import java.sql.Timestamp;
 
 
@@ -38,6 +40,7 @@ public class CurvePoint {
     @Column(name = "term")
     Double term;
 
+    @PositiveOrZero
     @Column(name = "value")
     Double value;
 
