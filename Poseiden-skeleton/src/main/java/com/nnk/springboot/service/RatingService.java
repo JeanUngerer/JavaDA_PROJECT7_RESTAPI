@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class RatingService {
     public List<RatingModel> findAllRating() {
         try {
             log.info("findAllRating");
-            List<RatingModel> ratingList = new ArrayList<RatingModel>();
+            List<@Valid RatingModel> ratingList = new ArrayList<RatingModel>();
             ratingRepository.findAll().forEach(ct -> ratingList.add(ratingMapper.entityToModel(ct)));
             return  ratingList;
         } catch (Exception e) {
@@ -54,7 +55,7 @@ public class RatingService {
     public RatingModel findRatingById(Integer id) {
         try {
             log.info("findRatingById - id: " + id.toString());
-            RatingModel rating = ratingMapper.entityToModel(ratingRepository.findById(id).orElseThrow(()
+            @Valid RatingModel rating = ratingMapper.entityToModel(ratingRepository.findById(id).orElseThrow(()
                     -> new ExceptionHandler("We didn't find your rating")));
             return rating;
         } catch (Exception e) {
@@ -72,7 +73,7 @@ public class RatingService {
     public RatingModel createRating(RatingDTO dto) {
         try {
             log.info("createRating");
-            RatingModel rating = ratingMapper.dtoToModel(dto);
+            @Valid RatingModel rating = ratingMapper.dtoToModel(dto);
             Rating entity = ratingRepository.save(ratingMapper.modelToEntity(rating));
             return ratingMapper.entityToModel(entity);
         } catch (Exception e) {
@@ -90,7 +91,7 @@ public class RatingService {
     public RatingModel updateRating(RatingDTO dto) {
         try {
             log.info("updateRatingModel - id: " + dto.getId().toString());
-            RatingModel rating = ratingMapper.entityToModel(ratingRepository.findById(dto.getId()).orElseThrow(()
+            @Valid RatingModel rating = ratingMapper.entityToModel(ratingRepository.findById(dto.getId()).orElseThrow(()
                     -> new ExceptionHandler("We could not find your rating")));
             ratingMapper.updateRatingModelFromDto(dto, rating, new CycleAvoidingMappingContext());
             Rating entity = ratingRepository.save(ratingMapper.modelToEntity(rating));
@@ -110,7 +111,7 @@ public class RatingService {
     public String deleteRating(Integer id) {
         try {
             log.info("deleteRatingModel - id: " + id.toString());
-            RatingModel rating = ratingMapper.entityToModel(ratingRepository.findById(id).orElseThrow(()
+            @Valid RatingModel rating = ratingMapper.entityToModel(ratingRepository.findById(id).orElseThrow(()
                     -> new ExceptionHandler("We could not find your rating")));
             ratingRepository.delete(ratingMapper.modelToEntity(rating));
             return "RatingModel deleted";

@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class TradeService {
     public List<TradeModel> findAllTrade() {
         try {
             log.info("findAllTrade");
-            List<TradeModel> tradeList = new ArrayList<TradeModel>();
+            List<@Valid TradeModel> tradeList = new ArrayList<TradeModel>();
             tradeRepository.findAll().forEach(ct -> tradeList.add(tradeMapper.entityToModel(ct)));
             return  tradeList;
         } catch (Exception e) {
@@ -54,7 +55,7 @@ public class TradeService {
     public TradeModel findTradeById(Integer id) {
         try {
             log.info("findTradeById - id: " + id.toString());
-            TradeModel trade = tradeMapper.entityToModel(tradeRepository.findById(id).orElseThrow(()
+            @Valid TradeModel trade = tradeMapper.entityToModel(tradeRepository.findById(id).orElseThrow(()
                     -> new ExceptionHandler("We didn't find your trade")));
             return trade;
         } catch (Exception e) {
@@ -72,7 +73,7 @@ public class TradeService {
     public TradeModel createTrade(TradeDTO dto) {
         try {
             log.info("createTrade");
-            TradeModel trade = tradeMapper.dtoToModel(dto);
+            @Valid TradeModel trade = tradeMapper.dtoToModel(dto);
             Trade entity = tradeRepository.save(tradeMapper.modelToEntity(trade));
             return tradeMapper.entityToModel(entity);
         } catch (Exception e) {
@@ -90,7 +91,7 @@ public class TradeService {
     public TradeModel updateTrade(TradeDTO dto) {
         try {
             log.info("updateTradeModel - id: " + dto.getTradeId().toString());
-            TradeModel trade = tradeMapper.entityToModel(tradeRepository.findById(dto.getTradeId()).orElseThrow(()
+            @Valid TradeModel trade = tradeMapper.entityToModel(tradeRepository.findById(dto.getTradeId()).orElseThrow(()
                     -> new ExceptionHandler("We could not find your trade")));
             tradeMapper.updateTradeModelFromDto(dto, trade, new CycleAvoidingMappingContext());
             Trade entity = tradeRepository.save(tradeMapper.modelToEntity(trade));
@@ -110,7 +111,7 @@ public class TradeService {
     public String deleteTrade(Integer id) {
         try {
             log.info("deleteTradeModel - id: " + id.toString());
-            TradeModel trade = tradeMapper.entityToModel(tradeRepository.findById(id).orElseThrow(()
+            @Valid TradeModel trade = tradeMapper.entityToModel(tradeRepository.findById(id).orElseThrow(()
                     -> new ExceptionHandler("We could not find your trade")));
             tradeRepository.delete(tradeMapper.modelToEntity(trade));
             return "TradeModel deleted";

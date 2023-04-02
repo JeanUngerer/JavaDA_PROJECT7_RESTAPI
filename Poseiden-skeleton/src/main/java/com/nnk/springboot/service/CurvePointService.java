@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class CurvePointService {
     public List<CurvePointModel> findAllCurvePoint() {
         try {
             log.info("findAllCurvePoint");
-            List<CurvePointModel> curvePointList = new ArrayList<CurvePointModel>();
+            List<@Valid CurvePointModel> curvePointList = new ArrayList<CurvePointModel>();
             curvePointRepository.findAll().forEach(ct -> curvePointList.add(curvePointMapper.entityToModel(ct)));
             return  curvePointList;
         } catch (Exception e) {
@@ -54,7 +55,7 @@ public class CurvePointService {
     public CurvePointModel findCurvePointById(Integer id) {
         try {
             log.info("findCurvePointById - id: " + id.toString());
-            CurvePointModel curvePoint = curvePointMapper.entityToModel(curvePointRepository.findById(id).orElseThrow(()
+            @Valid CurvePointModel curvePoint = curvePointMapper.entityToModel(curvePointRepository.findById(id).orElseThrow(()
                     -> new ExceptionHandler("We didn't find your curvePoint")));
             return curvePoint;
         } catch (Exception e) {
@@ -72,7 +73,7 @@ public class CurvePointService {
     public CurvePointModel createCurvePoint(CurvePointDTO dto) {
         try {
             log.info("createCurvePoint");
-            CurvePointModel curvePoint = curvePointMapper.dtoToModel(dto);
+            @Valid CurvePointModel curvePoint = curvePointMapper.dtoToModel(dto);
             CurvePoint entity = curvePointRepository.save(curvePointMapper.modelToEntity(curvePoint));
             return curvePointMapper.entityToModel(entity);
         } catch (Exception e) {
@@ -90,7 +91,7 @@ public class CurvePointService {
     public CurvePointModel updateCurvePoint(CurvePointDTO dto) {
         try {
             log.info("updateCurvePointModel - id: " + dto.getId().toString());
-            CurvePointModel curvePoint = curvePointMapper.entityToModel(curvePointRepository.findById(dto.getId()).orElseThrow(()
+            @Valid CurvePointModel curvePoint = curvePointMapper.entityToModel(curvePointRepository.findById(dto.getId()).orElseThrow(()
                     -> new ExceptionHandler("We could not find your curvePoint")));
             curvePointMapper.updateCurvePointModelFromDto(dto, curvePoint, new CycleAvoidingMappingContext());
             CurvePoint entity = curvePointRepository.save(curvePointMapper.modelToEntity(curvePoint));
@@ -110,7 +111,7 @@ public class CurvePointService {
     public String deleteCurvePoint(Integer id) {
         try {
             log.info("deleteCurvePointModel - id: " + id.toString());
-            CurvePointModel curvePoint = curvePointMapper.entityToModel(curvePointRepository.findById(id).orElseThrow(()
+            @Valid CurvePointModel curvePoint = curvePointMapper.entityToModel(curvePointRepository.findById(id).orElseThrow(()
                     -> new ExceptionHandler("We could not find your curvePoint")));
             curvePointRepository.delete(curvePointMapper.modelToEntity(curvePoint));
             return "CurvePointModel deleted";

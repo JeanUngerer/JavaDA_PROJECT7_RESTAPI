@@ -38,7 +38,7 @@ public class BidListService {
     public List<BidListModel> findAllBidList() {
         try {
             log.info("findAllBidList");
-            List<BidListModel> bidListList = new ArrayList<BidListModel>();
+            List<@Valid BidListModel> bidListList = new ArrayList<BidListModel>();
             bidListRepository.findAll().forEach(ct -> bidListList.add(bidListMapper.entityToModel(ct)));
             return  bidListList;
         } catch (Exception e) {
@@ -56,7 +56,7 @@ public class BidListService {
     public BidListModel findBidListById(Integer id) {
         try {
             log.info("findBidListById - id: " + id.toString());
-            BidListModel bidList = bidListMapper.entityToModel(bidListRepository.findById(id).orElseThrow(()
+            @Valid BidListModel bidList = bidListMapper.entityToModel(bidListRepository.findById(id).orElseThrow(()
                     -> new ExceptionHandler("We didn't find your bidList")));
             return bidList;
         } catch (Exception e) {
@@ -71,10 +71,10 @@ public class BidListService {
      * @return BidListModel the saved BidList
      * @throws  Exception Bad Request on error
      */
-    public BidListModel createBidList(BidListDTO dto) {
+    public BidListModel createBidList(@Valid BidListDTO dto) {
         try {
             log.info("createBidList");
-            BidListModel bidList = bidListMapper.dtoToModel(dto);
+            @Valid BidListModel bidList = bidListMapper.dtoToModel(dto);
             BidList entity = bidListRepository.save(bidListMapper.modelToEntity(bidList));
             return bidListMapper.entityToModel(entity);
         } catch (Exception e) {
@@ -89,10 +89,10 @@ public class BidListService {
      * @return BidListModel the saved BidList
      * @throws  Exception Bad Request on error
      */
-    public BidListModel updateBidList(BidListDTO dto) {
+    public BidListModel updateBidList(@Valid BidListDTO dto) {
         try {
             log.info("updateBidListModel - id: " + dto.getBidListId().toString());
-            BidListModel bidList = bidListMapper.entityToModel(bidListRepository.findById(dto.getBidListId()).orElseThrow(()
+            @Valid BidListModel bidList = bidListMapper.entityToModel(bidListRepository.findById(dto.getBidListId()).orElseThrow(()
                     -> new ExceptionHandler("We could not find your bidList")));
             bidListMapper.updateBidListModelFromDto(dto, bidList, new CycleAvoidingMappingContext());
             BidList entity = bidListRepository.save(bidListMapper.modelToEntity(bidList));
@@ -112,7 +112,7 @@ public class BidListService {
     public String deleteBidList(Integer id) {
         try {
             log.info("deleteBidListModel - id: " + id.toString());
-            BidListModel bidList = bidListMapper.entityToModel(bidListRepository.findById(id).orElseThrow(()
+            @Valid BidListModel bidList = bidListMapper.entityToModel(bidListRepository.findById(id).orElseThrow(()
                     -> new ExceptionHandler("We could not find your bidList")));
             bidListRepository.delete(bidListMapper.modelToEntity(bidList));
             return "BidListModel deleted";

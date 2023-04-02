@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class RuleNameService {
      * @return List<RuleNameModel> list of all entities found in database
      * @throws Exception Bad Request on error
      */
-    public List<RuleNameModel> findAllRuleName() {
+    public List<@Valid RuleNameModel> findAllRuleName() {
         try {
             log.info("findAllRuleName");
             List<RuleNameModel> ruleNameList = new ArrayList<RuleNameModel>();
@@ -54,7 +55,7 @@ public class RuleNameService {
     public RuleNameModel findRuleNameById(Integer id) {
         try {
             log.info("findRuleNameById - id: " + id.toString());
-            RuleNameModel ruleName = ruleNameMapper.entityToModel(ruleNameRepository.findById(id).orElseThrow(()
+            @Valid RuleNameModel ruleName = ruleNameMapper.entityToModel(ruleNameRepository.findById(id).orElseThrow(()
                     -> new ExceptionHandler("We didn't find your ruleName")));
             return ruleName;
         } catch (Exception e) {
@@ -72,7 +73,7 @@ public class RuleNameService {
     public RuleNameModel createRuleName(RuleNameDTO dto) {
         try {
             log.info("createRuleName");
-            RuleNameModel ruleName = ruleNameMapper.dtoToModel(dto);
+            @Valid RuleNameModel ruleName = ruleNameMapper.dtoToModel(dto);
             RuleName entity = ruleNameRepository.save(ruleNameMapper.modelToEntity(ruleName));
             return ruleNameMapper.entityToModel(entity);
         } catch (Exception e) {
@@ -90,7 +91,7 @@ public class RuleNameService {
     public RuleNameModel updateRuleName(RuleNameDTO dto) {
         try {
             log.info("updateRuleNameModel - id: " + dto.getId().toString());
-            RuleNameModel ruleName = ruleNameMapper.entityToModel(ruleNameRepository.findById(dto.getId()).orElseThrow(()
+            @Valid RuleNameModel ruleName = ruleNameMapper.entityToModel(ruleNameRepository.findById(dto.getId()).orElseThrow(()
                     -> new ExceptionHandler("We could not find your ruleName")));
             ruleNameMapper.updateRuleNameModelFromDto(dto, ruleName, new CycleAvoidingMappingContext());
             RuleName entity = ruleNameRepository.save(ruleNameMapper.modelToEntity(ruleName));
@@ -110,7 +111,7 @@ public class RuleNameService {
     public String deleteRuleName(Integer id) {
         try {
             log.info("deleteRuleNameModel - id: " + id.toString());
-            RuleNameModel ruleName = ruleNameMapper.entityToModel(ruleNameRepository.findById(id).orElseThrow(()
+            @Valid RuleNameModel ruleName = ruleNameMapper.entityToModel(ruleNameRepository.findById(id).orElseThrow(()
                     -> new ExceptionHandler("We could not find your ruleName")));
             ruleNameRepository.delete(ruleNameMapper.modelToEntity(ruleName));
             return "RuleNameModel deleted";
