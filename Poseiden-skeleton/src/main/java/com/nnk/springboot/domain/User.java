@@ -1,60 +1,47 @@
 package com.nnk.springboot.domain;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
+
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 
 @Entity
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
+
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", unique = true, nullable = false)
     private Integer id;
+
     @NotBlank(message = "Username is mandatory")
+    @Column(name = "username", nullable = false)
     private String username;
+
     @NotBlank(message = "Password is mandatory")
+    @Size(min = 8, message = "Password is too short min 8 characters")
+    @Size(max = 16, message = "Password is too long max 16 characters")
+    @Column(name = "password", nullable = false)
     private String password;
+
     @NotBlank(message = "FullName is mandatory")
+    @Column(name = "fullname", nullable = false)
     private String fullname;
+
     @NotBlank(message = "Role is mandatory")
+    @Column(name = "role", nullable = false)
     private String role;
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 }

@@ -1,0 +1,26 @@
+logging:
+  level:
+    org:
+      springframework: INFO
+  file:
+    name: logs/logfile.log
+  pattern:
+    file: "%d %p %c{1.} [%t] %m%n"
+
+
+################### DataSource Configuration ##########################
+spring:
+  datasource:
+    #driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/demop7?createDatabaseIfNotExist=true
+    #url: ${DATABASEURL}/demop7?createDatabaseIfNotExist=true
+    #url: ${SPRING_DATASOURCE_URL}
+    username: ${DBUSER}
+    password: ${DBPASS}
+
+  ################### Hibernate Configuration ##########################
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true

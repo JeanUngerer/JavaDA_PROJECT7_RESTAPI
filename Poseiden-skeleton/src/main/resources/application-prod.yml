@@ -1,0 +1,22 @@
+logging:
+  level:
+    org:
+      springframework: INFO
+
+
+################### DataSource Configuration ##########################
+spring:
+  datasource:
+    #driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/testp7?createDatabaseIfNotExist=true
+    username: ${DBUSER}
+    password: ${DBPASS}
+
+    initialize: true
+
+  ################### Hibernate Configuration ##########################
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
